@@ -192,7 +192,7 @@ umami_analytics:
 # logo and/or favicons of you website.
 # To generate hash: `$ echo -n "name@email.com" | md5`.
 gravatar:
-  email: name@email.com
+  email: zerolinck@foxmail.com
   hash: d41d8cd98f00b204e9800998ecf8427e
 
 # loads libraries and styles from CDN instead or relying on local files
