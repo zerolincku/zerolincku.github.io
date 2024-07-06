@@ -6,9 +6,20 @@ categories:
   - docker
 ---
 
+限制 cpu --cpus=''1"
+限制内存 -m 300m
+
 ## RabbitMq
+
 ```bash
-docker run -d --restart=always --name rabbitmq -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin rabbitmq:3.7.7-management
+docker run -d \ 
+  --restart=always \ 
+  --name rabbitmq \ 
+  -p 5672:5672 \ 
+  -p 15672:15672 \ 
+  -e RABBITMQ_DEFAULT_USER=admin \ 
+  -e RABBITMQ_DEFAULT_PASS=admin \ 
+  rabbitmq:3.7.7-management
 
 # 延迟交换机插件安装
 wget https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.8.0/rabbitmq_delayed_message_exchange-3.8.0.ez
@@ -19,7 +30,11 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 ```
 ## Redis
 ```bash
-docker run -d --restart=always --name myredis -p 6379:6379 redis:6.2.7 --requirepass "123456"
+docker run -d \ 
+  --restart=always \ 
+  --name myredis \ 
+  -p 6379:6379 \ 
+  redis:6.2.7 --requirepass "123456"
 ```
 ## Nginx
 ```bash
@@ -49,15 +64,17 @@ docker run -p 3306:3306 --name=mysql \
 -v /opt/docker/mysql/data:/var/lib/mysql \
 -v /opt/docker/mysql/mysql-files/:/var/lib/mysql-files \
 -e MYSQL_ROOT_PASSWORD=123456 \
--d --privileged=true --restart=on-failure:10 mysql:8.0.16 --lower-case-table-names=1
+-d --privileged=true \ 
+--restart=on-failure:10 mysql:8.0.16 --lower-case-table-names=1
 
 ```
 ## Zookeeper
 ```shell
 docker run -d --restart=on-failure:10 \
--e TZ="Asia/Shanghai" \
--p 2181:2181 \
---name zookeeper --restart always zookeeper:3.7
+  -e TZ="Asia/Shanghai" \
+  -p 2181:2181 \
+  --name zookeeper \ 
+  --restart always zookeeper:3.7
 ```
 ## XXL-JOB
 ```shell
@@ -95,7 +112,7 @@ docker run -d \
 -p 5601:5601  \
 kibana:7.17.1
 ```
-## PostgresQL
+## PostgreSQL
 ```shell
 mldir -p /opt/docker/postgresql/data
 
@@ -135,7 +152,13 @@ db.auth("admin","123456");
 ```
 ## Nacos
 ```shell
-docker run -d --name nacos --restart=on-failure:10 -p 8848:8848 -p 9848:9848 -p 9849:9849 -e MODE=standalone -e EMBEDDED_STORAGE nacos/nacos-server:v2.2.3-slim
+docker run -d \ 
+    --name nacos \ 
+    --restart=on-failure:10 \ 
+    -p 8848:8848 \ 
+    -p 9848:9848 \ 
+    -p 9849:9849 \ 
+    -e MODE=standalone \ 
+    -e EMBEDDED_STORAGE \ 
+    nacos/nacos-server:v2.2.3-slim
 ```
-限制 cpu --cpus=''1"
-限制内存 -m 300m
