@@ -50,7 +50,15 @@ docker cp  nginx:/usr/share/nginx /opt/docker/nginx/webapps
 docker rm -f nginx
 
 # 新部署Nginx容器
-docker run -d -p 80:80 --restart=always --user=root --privileged=true -v /opt/docker/nginx/logs:/var/log/nginx -v /opt/docker/nginx/conf:/etc/nginx/ -v /opt/docker/nginx/webapps:/usr/share/nginx --name=nginx  nginx:1.21cd
+docker run -d \ 
+	-p 80:80 \ 
+	--restart=always \ 
+	--user=root \ 
+	--privileged=true \ 
+	-v /opt/docker/nginx/logs:/var/log/nginx \ 
+	-v /opt/docker/nginx/conf:/etc/nginx/ \ 
+	-v /opt/docker/nginx/webapps:/usr/share/nginx \ 
+	--name=nginx  nginx:1.21cd
 ```
 ## MySQL
 ```bash
