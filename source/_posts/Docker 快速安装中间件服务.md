@@ -84,7 +84,30 @@ docker run -d --restart=on-failure:10 \
   --name zookeeper \ 
   --restart always zookeeper:3.7
 ```
+## Kafka
+
+~~~shell
+docker run -d \
+  --network app-bridge \
+  --name zookeeper \
+  -e ALLOW_ANONYMOUS_LOGIN=yes \
+  -p 2181:2181 bitnami/zookeeper
+
+
+docker run -d --name=kafka \
+ --network app-bridge \
+ -p 9092:9092 \
+ -e ALLOW_PLAINTEXT_LISTENER=yes \
+ -e KAFKA_CFG_ZOOKEEPER_CONNECT=换成zookeeper的ip:2181 \
+ -e KAFKA_BROKER_ID=1 \
+ -e KAFKA_HEAP_OPTS="-Xmx180m -Xms180m" \
+ -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092 \
+ -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092  \
+ bitnami/kafka
+~~~
+
 ## XXL-JOB
+
 ```shell
 docker run -e --restart=on-failure:10 \
 PARAMS="--spring.datasource.url=jdbc:mysql://10.3.0.61:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai --spring.datasource.username=root --spring.datasource.password=123456" \
@@ -170,3 +193,6 @@ docker run -d \
     -e EMBEDDED_STORAGE \ 
     nacos/nacos-server:v2.2.3-slim
 ```
+
+
+
