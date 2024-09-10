@@ -11,7 +11,7 @@ categories:
 
 ### 操作系统要求
 
-需要 CentOS 7 或 8 的版本
+
 
 ### 卸载旧版本Docker
 
