@@ -8,17 +8,37 @@ categories:
 
 限制 cpu --cpus=''1"
 限制内存 -m 300m
+限制日志 
+~~~
+# compose
+services:
+  myapp:
+    image: myimage
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"  # 最大日志文件大小为100MB
+        max-file: "2"     # 最多保留5个日志文件
+# docker run
+--log-opt max-size=50m --log-opt max-file=2 
+
+## /etc/docker/daemon.json 配置文件
+{
+    "log-driver" : "json-file",
+    "log-opts" : {
+      "max-size" : "50m",
+      "max-file" : "2"
+    }
+}
+~~~
 
 ## RabbitMq
-
 ```bash
-docker run -d \ 
-  --restart=always \ 
-  --name rabbitmq \ 
-  -p 5672:5672 \ 
-  -p 15672:15672 \ 
-  -e RABBITMQ_DEFAULT_USER=admin \ 
-  -e RABBITMQ_DEFAULT_PASS=admin \ 
+docker run -d \
+  --name rabbitmq \
+  -p 5672:5672 -p 15672:15672 \
+  -e RABBITMQ_DEFAULT_USER=admin \
+  -e RABBITMQ_DEFAULT_PASS=admin \
   rabbitmq:3.7.7-management
 
 # 延迟交换机插件安装
@@ -28,14 +48,12 @@ docker exec -it rabbitmq bash
 cd plugins
 rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 ```
+
 ## Redis
 ```bash
-docker run -d \ 
-  --restart=always \ 
-  --name myredis \ 
-  -p 6379:6379 \ 
-  redis:6.2.7 --requirepass "123456"
+docker run -d --restart=always --name myredis -p 6379:6379 redis:6.2.7 --requirepass "123456"
 ```
+
 ## Nginx
 ```bash
 # 生成相关初始化文件
@@ -50,16 +68,9 @@ docker cp  nginx:/usr/share/nginx /opt/docker/nginx/webapps
 docker rm -f nginx
 
 # 新部署Nginx容器
-docker run -d \ 
-	-p 80:80 \ 
-	--restart=always \ 
-	--user=root \ 
-	--privileged=true \ 
-	-v /opt/docker/nginx/logs:/var/log/nginx \ 
-	-v /opt/docker/nginx/conf:/etc/nginx/ \ 
-	-v /opt/docker/nginx/webapps:/usr/share/nginx \ 
-	--name=nginx  nginx:1.21cd
+docker run -d -p 80:80 --restart=always --user=root --privileged=true -v /opt/docker/nginx/logs:/var/log/nginx -v /opt/docker/nginx/conf:/etc/nginx/ -v /opt/docker/nginx/webapps:/usr/share/nginx --name=nginx  nginx:1.21cd
 ```
+
 ## MySQL
 ```bash
 #创建数据存储目录
@@ -72,42 +83,47 @@ docker run -p 3306:3306 --name=mysql \
 -v /opt/docker/mysql/data:/var/lib/mysql \
 -v /opt/docker/mysql/mysql-files/:/var/lib/mysql-files \
 -e MYSQL_ROOT_PASSWORD=123456 \
--d --privileged=true \ 
---restart=on-failure:10 mysql:8.0.16 --lower-case-table-names=1
+-d --privileged=true --restart=on-failure:10 mysql:8.0.16 --lower-case-table-names=1
 
 ```
+
 ## Zookeeper
 ```shell
 docker run -d --restart=on-failure:10 \
-  -e TZ="Asia/Shanghai" \
-  -p 2181:2181 \
-  --name zookeeper \ 
-  --restart always zookeeper:3.7
+-e TZ="Asia/Shanghai" \
+-p 2181:2181 \
+--name zookeeper --restart always zookeeper:3.7
 ```
-## Kafka
 
-~~~shell
+## Kafka
+```shell
+docker network create kafka-bridge \
+  --subnet 192.169.0.0/16 \
+  --gateway 192.169.0.1 \
+  --driver bridge
+
 docker run -d \
-  --network app-bridge \
   --name zookeeper \
+  --net kafka-bridge \
+  --ip 192.169.0.2 \
   -e ALLOW_ANONYMOUS_LOGIN=yes \
-  -p 2181:2181 bitnami/zookeeper
+  -p 2181:2181 bitnami/zookeeper:3.9.2
 
 
 docker run -d --name=kafka \
- --network app-bridge \
  -p 9092:9092 \
+ --net kafka-bridge \
+  --ip 192.169.0.3 \
  -e ALLOW_PLAINTEXT_LISTENER=yes \
- -e KAFKA_CFG_ZOOKEEPER_CONNECT=换成zookeeper的ip:2181 \
+ -e KAFKA_CFG_ZOOKEEPER_CONNECT=192.169.0.2:2181 \
  -e KAFKA_BROKER_ID=1 \
  -e KAFKA_HEAP_OPTS="-Xmx180m -Xms180m" \
  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092 \
  -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092  \
- bitnami/kafka
-~~~
+ bitnami/kafka:3.3.2
+```
 
 ## XXL-JOB
-
 ```shell
 docker run -e --restart=on-failure:10 \
 PARAMS="--spring.datasource.url=jdbc:mysql://10.3.0.61:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai --spring.datasource.username=root --spring.datasource.password=123456" \
@@ -116,6 +132,7 @@ PARAMS="--spring.datasource.url=jdbc:mysql://10.3.0.61:3306/xxl_job?useUnicode=t
 -v /tmp:/data/applogs \
 -d xuxueli/xxl-job-admin:2.2.0
 ```
+
 ## Elasticsearch
 ```shell
 docker run -d \
@@ -134,6 +151,7 @@ docker exec -it es /bin/bash
 ./bin/elasticsearch-plugin  install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.17.1/elasticsearch-analysis-ik-7.17.1.zip
 docker restart es
 ```
+
 ## Kibana
 ```shell
 docker run -d \
@@ -143,7 +161,8 @@ docker run -d \
 -p 5601:5601  \
 kibana:7.17.1
 ```
-## PostgreSQL
+
+## PostgresQL
 ```shell
 mldir -p /opt/docker/postgresql/data
 
@@ -154,6 +173,7 @@ docker run --name postgres \
     -v /opt/docker/postgresql/data:/var/lib/postgresql/data \
     -d postgres:13.5
 ```
+
 ## Neo4j
 ```shell
 mkdir -p /opt/docker/neo4j/data
@@ -169,30 +189,49 @@ docker run --name neo4j \
 			-v /opt/docker/neo4j/logs:/mydata/logs \
 			-v /opt/docker/neo4j/conf:/var/lib/neo4j/conf \
 			-v /opt/docker/neo4j/import:/var/lib/neo4j/import \
-			-d neo4j:3.5.22-community
+			-d neo4j:4.4-community
 ```
+
 ## MongDB
 ```shell
-docker run --name mongodb -p 27017:27017 -d mongo:4.4.3
+docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:6.0.5-ubi8
 
 docker exec -it mongodb mongo admin
 
-db.createUser({ user: 'admin', pwd: '123456', roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });
+db.createUser({ user: 'admin', pwd: 'admin', roles: [ { role: "userAdminAnyDatabase", db: "admin" } ] });
 
-db.auth("admin","123456");
+db.auth("admin","admin");
 ```
+
 ## Nacos
 ```shell
-docker run -d \ 
-    --name nacos \ 
-    --restart=on-failure:10 \ 
-    -p 8848:8848 \ 
-    -p 9848:9848 \ 
-    -p 9849:9849 \ 
-    -e MODE=standalone \ 
-    -e EMBEDDED_STORAGE \ 
-    nacos/nacos-server:v2.2.3-slim
+docker run -d --name nacos \
+  --restart=on-failure:10 \
+  -p 8848:8848 \
+  -p 9848:9848 \
+  -p 9849:9849 \
+  -e MODE=standalone \
+  -e EMBEDDED_STORAGE \
+  nacos/nacos-server:v2.2.3-slim
 ```
 
+## Minio
+```shell
+docker run -d --name passiflora-minio \
+    --restart=always \
+    --publish 9000:9000 \
+    --publish 9001:9001 \
+    --env MINIO_ROOT_USER="minio" \
+    --env MINIO_ROOT_PASSWORD="minio" \
+    -v /etc/localtime:/etc/localtime:ro \
+    bitnami/minio:2024.6.13
+```
 
+## Prometheus
+```shell
+docker run \
+    -d --name prometheus \
+    -p 9090:9090 \
+    prom/prometheus
+```
 
