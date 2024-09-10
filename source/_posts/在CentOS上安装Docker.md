@@ -96,7 +96,9 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 ## 离线安装Docker
 
-### 下载rpm的离线安装包
+### 下载离线安装包
+
+#### 方式1
 
 [下载地址](https://download.docker.com/linux/centos/ )，选择CentOS对应的版本，建议下载 stable 稳定版
 
@@ -109,6 +111,15 @@ docker-ce-cli-20.10.9-3.el7.x86_64.rpm
 docker-ce-rootless-extras-20.10.9-3.el7.x86_64.rpm
 docker-ce-selinux-17.03.3.ce-1.el7.noarch.rpm
 docker-scan-plugin-0.8.0-3.el7.x86_64.rpm
+
+#### 方式2
+
+找一台能联网的相同架构的机器，下载离线安装包
+
+~~~shell
+$ sudo yum download docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+~~~
+
 
 ### 离线安装
 
