@@ -1,10 +1,11 @@
-~~~
-title: Java JVM 内存模型
+---
+title: 在Ubuntu上安装Docker
 date: 2024-07-05 22:38:18
 tags:
 categories:
-  - docker
-~~~
+  - java
+  - jvm
+---
 
 ## 先决条件
 
