@@ -2,7 +2,6 @@
 title: systemd注册服务自动重启
 date: 2024-09-11 09:18:00
 tags:
-categories:
   - linux
 ---
 

@@ -2,7 +2,6 @@
 title: 查看Linux系统信息
 date: 2024-09-10 17:14:18
 tags:
-categories:
   - linux
 ---
 

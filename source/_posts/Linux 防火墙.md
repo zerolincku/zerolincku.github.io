@@ -2,7 +2,6 @@
 title: Linux 防火墙
 date: 2024-09-11 09:19:00
 tags:
-categories:
   - linux
 ---
 

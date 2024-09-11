@@ -2,9 +2,7 @@
 title: 在Ubuntu上安装Docker
 date: 2024-07-05 22:38:18
 tags:
-categories:
-  - java
-  - jvm
+  - docker
 ---
 
 ## 先决条件
