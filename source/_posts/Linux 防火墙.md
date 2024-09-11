@@ -8,44 +8,44 @@ categories:
 
 ## CentOS
 
-### <font style="color:rgb(0, 0, 0);">设置开机启用防火墙</font>
+### 设置开机启用防火墙
 ```bash
 systemctl enable firewalld.service
 ```
 
-### <font style="color:rgb(0, 0, 0);">设置开机禁用防火墙</font>
+### 设置开机禁用防火墙
 ```bash
 systemctl disable firewalld.service
 ```
 
-### <font style="color:rgb(0, 0, 0);">启动防火墙</font>
+### 启动防火墙
 ```bash
 systemctl start firewalld
 ```
 
-### <font style="color:rgb(0, 0, 0);">关闭防火墙</font>
+### 关闭防火墙
 ```bash
 systemctl stop firewalld
 ```
 
-### <font style="color:rgb(0, 0, 0);">检查防火墙状态</font>
+### 检查防火墙状态
 ```bash
 systemctl status firewalld
 ```
 
-### <font style="color:rgb(0, 0, 0);">开启防火墙端口</font>
+### 开启防火墙端口
 ```bash
 firewall-cmd --zone=public --add-port=9200/tcp --permanent
 
 firewall-cmd --zone=public --add-port=1000-9000/tcp --permanent
 ```
 
-### <font style="color:rgb(0, 0, 0);">重新加载配置</font>
+### 重新加载配置
 ```bash
 firewall-cmd --reload
 ```
 
-### <font style="color:rgb(0, 0, 0);">关闭防火墙端口</font>
+### 关闭防火墙端口
 ```bash
 firewall-cmd --zone=public --remove-port=9200/tcp --permanent
 ```
