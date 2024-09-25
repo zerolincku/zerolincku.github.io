@@ -8,6 +8,7 @@ tags:
 限制 cpu --cpus=''1"
 限制内存 -m 300m
 限制日志 
+
 ~~~
 # compose
 services:
@@ -82,7 +83,7 @@ docker run -p 3306:3306 --name=mysql \
 -v /opt/docker/mysql/data:/var/lib/mysql \
 -v /opt/docker/mysql/mysql-files/:/var/lib/mysql-files \
 -e MYSQL_ROOT_PASSWORD=123456 \
--d --privileged=true --restart=on-failure:10 mysql:8.0.16 --lower-case-table-names=1
+-d --privileged=true --restart=on-failure:10 mysql:8.4.2 --lower-case-table-names=1
 
 ```
 
@@ -233,4 +234,16 @@ docker run \
     -p 9090:9090 \
     prom/prometheus
 ```
+
+## PolarDB-X
+
+~~~shell
+docker run -d \
+	--name polardb-x \
+	-m 1024m \
+	-p 8527:8527 \
+	polardbx/polardb-x:2.3.1
+	
+# 出现不支持外键提示的话，需要 set global enable_foreign_key = true
+~~~
 
