@@ -1,3 +1,10 @@
+---
+title: rssocks 配置与使用
+date: 2024-09-25 14:19:00
+tags:
+  - linux
+---
+
 ### 安装
 
 ~~~shell
