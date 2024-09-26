@@ -41,6 +41,9 @@ external_link:
 filename_case: 0
 render_drafts: false
 post_asset_folder: true
+marked:
+  prependRoot: true
+  postAsset: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
@@ -107,4 +110,4 @@ deploy:
   branch: gh-pages
 
 plugins:
-  - hexo-asset-img
+  - hexo-renderer-marked
