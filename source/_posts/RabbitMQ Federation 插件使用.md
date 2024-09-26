@@ -16,12 +16,13 @@ rabbitmq-plugins enable rabbitmq_federation_management
 
 #### 1. 下游配置上游地址
 
-![image-20240926101635871](/Users/linchangkun/workspace/linck/hexo/blog/source/_posts/.assets/image-20240926101635871.png)
+![image-20240926101635871](/Users/linchangkun/workspace/linck/hexo/blog/source/_posts/assets/image-20240926101635871.png)
 
 #### 2. 下游配置策略
 
-![image-20240926101906798](/Users/linchangkun/workspace/linck/hexo/blog/source/_posts/.assets/image-20240926101906798.png)
+![image-20240926101906798](/Users/linchangkun/workspace/linck/hexo/blog/source/_posts/assets/image-20240926101906798.png)
 
 #### 3. 查看联邦状态
 
-![image-20240926102035608](/Users/linchangkun/workspace/linck/hexo/blog/source/_posts/.assets/image-20240926102035608.png)
+![image-20240926102035608](/Users/linchangkun/workspace/linck/hexo/blog/source/_posts/assets/image-20240926102035608.png)
+
