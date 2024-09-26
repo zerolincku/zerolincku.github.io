@@ -105,3 +105,6 @@ deploy:
   repo: https://github.com/zerolincku/zerolincku.github.io.git
   # example, https://github.com/hexojs/hexojs.github.io
   branch: gh-pages
+
+plugins:
+  - hexo-asset-img
