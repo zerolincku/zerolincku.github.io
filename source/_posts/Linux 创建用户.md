@@ -5,12 +5,12 @@ tags:
   - linux
 ---
 
-## 1. 创建 `ideal` 用户
+## 1. 创建 `username` 用户
 
-使用 `useradd` 命令创建新用户 `ideal`：
+使用 `useradd` 命令创建新用户 `username`：
 
 ~~~bash
-sudo useradd -m -s /bin/bash ideal
+sudo useradd -m -s /bin/bash username
 ~~~
 
 * `-m`：创建用户的 home 目录。
@@ -19,10 +19,10 @@ sudo useradd -m -s /bin/bash ideal
 
 ## 2. 设置密码
 
-为 `ideal` 用户设置密码：
+为 `username` 用户设置密码：
 
 ~~~bash
-sudo passwd ideal
+sudo passwd username
 ~~~
 
 ## 3. 确保用户可以通过 SSH 登录
@@ -44,20 +44,20 @@ sudo passwd ideal
 
 ## 4. 将用户添加到 `docker` 组（如果需要运行 docker）
 
-将用户 `ideal` 添加到 `docker` 组，以允许该用户管理 Docker 容器：
+将用户 `username` 添加到 `docker` 组，以允许该用户管理 Docker 容器：
 
 ~~~bash
-sudo usermod -aG docker ideal
+sudo usermod -aG docker username
 ~~~
 
 * `-aG`：将用户附加到 `docker` 组。
 
 ## 5. 验证用户组
 
-要验证 `ideal` 是否成功添加到 `docker` 组，可以运行：
+要验证 `username` 是否成功添加到 `docker` 组，可以运行：
 
 ~~~bash
-id ideal
+id username
 ~~~
 
 ## 6. 添加 sudo 权限（如果需要）
