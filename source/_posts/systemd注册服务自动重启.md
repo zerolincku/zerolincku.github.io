@@ -6,38 +6,38 @@ tags:
 ---
 
 
-<font style="background-color:#FFFFFF;">使用 systemd 注册服务，可以配置使得进程在崩溃宕机的时候自动重启</font>
+使用 systemd 注册服务，可以配置使得进程在崩溃宕机的时候自动重启
 
-<font style="background-color:#FFFFFF;">在大多数 Linux 发行版中，</font><font style="background-color:#FFFFFF;">systemd</font><font style="background-color:#FFFFFF;"> </font><font style="background-color:#FFFFFF;">服务单元文件通常存储在</font><font style="background-color:#FFFFFF;"> </font><font style="background-color:#FFFFFF;">/etc/systemd/system</font><font style="background-color:#FFFFFF;"> </font><font style="background-color:#FFFFFF;">目录中。需要将</font><font style="background-color:#FFFFFF;"> </font><font style="background-color:#FFFFFF;">.service</font><font style="background-color:#FFFFFF;"> </font><font style="background-color:#FFFFFF;">后缀的服务单元文件放在该目录下，并确保其权限为</font><font style="background-color:#FFFFFF;"> </font><font style="background-color:#FFFFFF;">644</font><font style="background-color:#FFFFFF;">.</font>
+在大多数 Linux 发行版中，systemd 服务单元文件通常存储在 /etc/systemd/system 目录中。需要将 .service 后缀的服务单元文件放在该目录下，并确保其权限为 644.
 
-<font style="background-color:#FFFFFF;">一旦将服务单元文件放在正确的位置，就可以使用 systemctl 命令启用和管理服务。例如，要启用名称为 "management.service" 的服务，请运行以下命令：</font>
+一旦将服务单元文件放在正确的位置，就可以使用 systemctl 命令启用和管理服务。例如，要启用名称为 "management.service" 的服务，请运行以下命令：
 
 ```plain
 sudo systemctl enable management.service
 ```
 
-<font style="background-color:#FFFFFF;">然后，可以使用以下命令来检查服务状态：</font>
+然后，可以使用以下命令来检查服务状态：
 
 ```plain
 systemctl status management.service
 ```
 
-<font style="background-color:#FFFFFF;">要启动或停止服务，请使用以下命令：</font>
+要启动或停止服务，请使用以下命令：
 
 ```plain
 sudo systemctl start management.service
 sudo systemctl stop management.service
 ```
 
-<font style="background-color:#FFFFFF;">注意，如果对 systemd 进行任何更改（如创建、编辑或删除服务），都需要运行以下命令重新加载 systemd 配置：</font>
+注意，如果对 systemd 进行任何更改（如创建、编辑或删除服务），都需要运行以下命令重新加载 systemd 配置：
 
 ```plain
 sudo systemctl daemon-reload
 ```
 
-<font style="background-color:#FFFFFF;">这会告诉 systemd 重新加载配置文件并更新内部配置数据库。</font>
+这会告诉 systemd 重新加载配置文件并更新内部配置数据库。
 
-<font style="background-color:#FFFFFF;">下面是一个 service 的示例文件</font>
+下面是一个 service 的示例文件
 
 ```bash
 [Unit]
