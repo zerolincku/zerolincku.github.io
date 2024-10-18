@@ -4,6 +4,45 @@ date: 2024-07-05 22:38:18
 tags:
   - docker
 ---
+## 配置宿主机地址
+#### docker run
+~~~bash
+host.docker.internal 表示宿主机 ip
+~~~
+
+#### docker-compose
+
+~~~yaml
+# eg: 需要 extra_hosts 中配置了 host-gateway
+services:
+  passiflora-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile-gateway
+    mem_limit: 2048m
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    container_name: passiflora-gateway
+    restart: unless-stopped
+    image: passiflora-gateway
+    extra_hosts:
+      - "passiflora-nacos:host-gateway"
+      - "passiflora-redis:host-gateway"
+    expose:
+      - 51000
+    ports:
+      - "51000:51000"
+    healthcheck:
+      test: [ "CMD", "curl", "http://localhost:51000" ]
+      start_period: 90s
+      interval: 60s
+      timeout: 10s
+      retries: 5
+~~~
+
+## 限制资源
 
 限制 cpu --cpus=''1"
 限制内存 -m 300m
@@ -39,6 +78,8 @@ docker run -d \
   -p 5672:5672 -p 15672:15672 \
   -e RABBITMQ_DEFAULT_USER=admin \
   -e RABBITMQ_DEFAULT_PASS=admin \
+  -v /etc/localtime:/etc/localtime:ro \
+	-e TZ="Asia/Shanghai" \
   rabbitmq:3.7.7-management
 
 # 延迟交换机插件安装
@@ -51,7 +92,13 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 
 ## Redis
 ```bash
-docker run -d --restart=always --name myredis -p 6379:6379 redis:6.2.7 --requirepass "123456"
+docker run -d \
+	--restart=always \
+	--name myredis \
+	-p 6379:6379 \
+	-v /etc/localtime:/etc/localtime:ro \
+  -e TZ="Asia/Shanghai" \
+	redis:6.2.7 --requirepass "123456"
 ```
 
 ## Nginx
@@ -68,7 +115,16 @@ docker cp  nginx:/usr/share/nginx /opt/docker/nginx/webapps
 docker rm -f nginx
 
 # 新部署Nginx容器
-docker run -d -p 80:80 --restart=always --user=root --privileged=true -v /opt/docker/nginx/logs:/var/log/nginx -v /opt/docker/nginx/conf:/etc/nginx/ -v /opt/docker/nginx/webapps:/usr/share/nginx --name=nginx  nginx:1.21cd
+docker run -d \
+	-p 80:80 \
+	--restart=always \
+	--privileged=true \
+	-v /opt/docker/nginx/logs:/var/log/nginx \
+	-v /opt/docker/nginx/conf:/etc/nginx/ \
+	-v /opt/docker/nginx/webapps:/usr/share/nginx \
+	-v /etc/localtime:/etc/localtime:ro \
+  -e TZ="Asia/Shanghai" \
+	--name=nginx  nginx:1.21cd
 ```
 
 ## MySQL
@@ -82,14 +138,17 @@ docker run -p 3306:3306 --name=mysql \
 -v /opt/docker/mysql/conf/:/etc/mysql/ \
 -v /opt/docker/mysql/data:/var/lib/mysql \
 -v /opt/docker/mysql/mysql-files/:/var/lib/mysql-files \
+-v /etc/localtime:/etc/localtime:ro \
+-e TZ="Asia/Shanghai" \
 -e MYSQL_ROOT_PASSWORD=123456 \
--d --privileged=true --restart=on-failure:10 mysql:8.4.2 --lower-case-table-names=1
+-d --privileged=true --restart=unless-stop mysql:8.4.2 --lower-case-table-names=1
 
 ```
 
 ## Zookeeper
 ```shell
 docker run -d --restart=on-failure:10 \
+-v /etc/localtime:/etc/localtime:ro \
 -e TZ="Asia/Shanghai" \
 -p 2181:2181 \
 --name zookeeper --restart always zookeeper:3.7
@@ -106,6 +165,8 @@ docker run -d \
   --name zookeeper \
   --net kafka-bridge \
   --ip 192.169.0.2 \
+  -v /etc/localtime:/etc/localtime:ro \
+	-e TZ="Asia/Shanghai" \
   -e ALLOW_ANONYMOUS_LOGIN=yes \
   -p 2181:2181 bitnami/zookeeper:3.9.2
 
@@ -113,7 +174,9 @@ docker run -d \
 docker run -d --name=kafka \
  -p 9092:9092 \
  --net kafka-bridge \
-  --ip 192.169.0.3 \
+ --ip 192.169.0.3 \
+ -v /etc/localtime:/etc/localtime:ro \
+ -e TZ="Asia/Shanghai" \
  -e ALLOW_PLAINTEXT_LISTENER=yes \
  -e KAFKA_CFG_ZOOKEEPER_CONNECT=192.169.0.2:2181 \
  -e KAFKA_BROKER_ID=1 \
@@ -130,6 +193,8 @@ PARAMS="--spring.datasource.url=jdbc:mysql://10.3.0.61:3306/xxl_job?useUnicode=t
 -p 8081:8080 \
 --name xxl-job \
 -v /tmp:/data/applogs \
+-v /etc/localtime:/etc/localtime:ro \
+-e TZ="Asia/Shanghai" \
 -d xuxueli/xxl-job-admin:2.2.0
 ```
 
@@ -141,6 +206,8 @@ docker run -d \
     -e "discovery.type=single-node" \
     -v es-data:/usr/share/elasticsearch/data \
     -v es-plugins:/usr/share/elasticsearch/plugins \
+    -v /etc/localtime:/etc/localtime:ro \
+		-e TZ="Asia/Shanghai" \
     --privileged \
     -p 9200:9200 \
     -p 9300:9300 \
@@ -157,6 +224,8 @@ docker restart es
 docker run -d \
 --name kibana \
 --link=es:es \
+-v /etc/localtime:/etc/localtime:ro \
+-e TZ="Asia/Shanghai" \
 -e ELASTICSEARCH_HOSTS=http://es:9200 \
 -p 5601:5601  \
 kibana:7.17.1
@@ -171,6 +240,8 @@ docker run --name postgres \
     -e POSTGRES_PASSWORD=postgres \
     -p 5432:5432 \
     -v /opt/docker/postgresql/data:/var/lib/postgresql/data \
+    -v /etc/localtime:/etc/localtime:ro \
+		-e TZ="Asia/Shanghai" \
     -d postgres:13.5
 ```
 
@@ -189,6 +260,8 @@ docker run --name neo4j \
 			-v /opt/docker/neo4j/logs:/mydata/logs \
 			-v /opt/docker/neo4j/conf:/var/lib/neo4j/conf \
 			-v /opt/docker/neo4j/import:/var/lib/neo4j/import \
+			-v /etc/localtime:/etc/localtime:ro \
+			-e TZ="Asia/Shanghai" \
 			-d neo4j:4.4-community
 ```
 
@@ -212,6 +285,8 @@ docker run -d --name nacos \
   -p 9849:9849 \
   -e MODE=standalone \
   -e EMBEDDED_STORAGE \
+  -v /etc/localtime:/etc/localtime:ro \
+	-e TZ="Asia/Shanghai" \
   nacos/nacos-server:v2.2.3-slim
 ```
 
@@ -224,6 +299,7 @@ docker run -d --name passiflora-minio \
     --env MINIO_ROOT_USER="minio" \
     --env MINIO_ROOT_PASSWORD="minio" \
     -v /etc/localtime:/etc/localtime:ro \
+	  -e TZ="Asia/Shanghai" \
     bitnami/minio:2024.6.13
 ```
 
@@ -232,6 +308,8 @@ docker run -d --name passiflora-minio \
 docker run \
     -d --name prometheus \
     -p 9090:9090 \
+    -v /etc/localtime:/etc/localtime:ro \
+		-e TZ="Asia/Shanghai" \
     prom/prometheus
 ```
 
@@ -242,6 +320,8 @@ docker run -d \
 	--name polardb-x \
 	-m 1024m \
 	-p 8527:8527 \
+	-v /etc/localtime:/etc/localtime:ro \
+	-e TZ="Asia/Shanghai" \
 	polardbx/polardb-x:2.3.1
 	
 # 出现不支持外键提示的话，需要 set global enable_foreign_key = true
