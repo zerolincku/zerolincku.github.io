@@ -71,7 +71,7 @@ services:
 }
 ~~~
 
-## RabbitMq
+## RabbitMQ
 ```bash
 docker run -d \
   --name rabbitmq \
@@ -98,7 +98,7 @@ docker run -d \
 	-p 6379:6379 \
 	-v /etc/localtime:/etc/localtime:ro \
   -e TZ="Asia/Shanghai" \
-	redis:6.2.7 --requirepass "123456"
+	redis:7.4.1-alpine --requirepass "123456"
 ```
 
 ## Nginx
@@ -108,9 +108,9 @@ docker run -d --restart=on-failure:10 --name=nginx  nginx:1.21
 
 # 拷贝Ngixn容器中相关初始化文件到宿主机中，并删除容器
 mkdir -p /opt/docker/nginx
-docker cp  nginx:/var/log/nginx /opt/docker/nginx/logs
-docker cp  nginx:/etc/nginx /opt/docker/nginx/conf
-docker cp  nginx:/usr/share/nginx /opt/docker/nginx/webapps
+docker cp nginx:/var/log/nginx /opt/docker/nginx/logs
+docker cp nginx:/etc/nginx /opt/docker/nginx/conf
+docker cp nginx:/usr/share/nginx /opt/docker/nginx/webapps
 
 docker rm -f nginx
 
@@ -124,7 +124,7 @@ docker run -d \
 	-v /opt/docker/nginx/webapps:/usr/share/nginx \
 	-v /etc/localtime:/etc/localtime:ro \
   -e TZ="Asia/Shanghai" \
-	--name=nginx  nginx:1.21cd
+	--name=nginx  nginx:1.27.2
 ```
 
 ## MySQL
@@ -242,7 +242,7 @@ docker run --name postgres \
     -v /opt/docker/postgresql/data:/var/lib/postgresql/data \
     -v /etc/localtime:/etc/localtime:ro \
 		-e TZ="Asia/Shanghai" \
-    -d postgres:13.5
+    -d postgres:17.0-alpine
 ```
 
 ## Neo4j
@@ -287,7 +287,7 @@ docker run -d --name nacos \
   -e EMBEDDED_STORAGE \
   -v /etc/localtime:/etc/localtime:ro \
 	-e TZ="Asia/Shanghai" \
-  nacos/nacos-server:v2.2.3-slim
+  nacos/nacos-server:v2.4.3-slim
 ```
 
 ## Minio
@@ -300,7 +300,7 @@ docker run -d --name passiflora-minio \
     --env MINIO_ROOT_PASSWORD="minio" \
     -v /etc/localtime:/etc/localtime:ro \
 	  -e TZ="Asia/Shanghai" \
-    bitnami/minio:2024.6.13
+    bitnami/minio:2024.10.13
 ```
 
 ## Prometheus
