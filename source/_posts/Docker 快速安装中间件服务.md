@@ -233,13 +233,19 @@ kibana:7.17.1
 
 ## PostgresQL
 ```shell
-mldir -p /opt/docker/postgresql/data
+docker run --name postgres -d postgres:17.0-alpine
+docker cp postgres:/var/lib/postgresql/data $HOME/workspace/docker-data/postgres/data
+docker cp postgres:/etc/postgresql $HOME/workspace/docker-data/postgres/config
+docker cp postgres:/var/log/postgresql $HOME/workspace/docker-data/postgres/log
+docker rm -f postgres
 
 docker run --name postgres \
     --restart=unless-stopped \
     -e POSTGRES_PASSWORD=postgres \
     -p 5432:5432 \
-    -v /opt/docker/postgresql/data:/var/lib/postgresql/data \
+    -v $HOME/workspace/docker-data/postgres/data:/var/lib/postgresql/data \
+    -v $HOME/workspace/docker-data/postgres/log:/var/log/postgresql \
+    -v $HOME/workspace/docker-data/postgres/config:/etc/postgresql \
     -v /etc/localtime:/etc/localtime:ro \
 		-e TZ="Asia/Shanghai" \
     -d postgres:17.0-alpine
@@ -278,6 +284,18 @@ db.auth("admin","admin");
 
 ## Nacos
 ```shell
+## 建议使用资源占用更低的 r-nacos
+## http://localhost:10848/rnacos/
+## admin/admin
+docker run -d \
+    --name r-nacos \
+    --restart=unless-stopped \
+    -p 8848:8848 -p 9848:9848 -p 10848:10848 \
+    -v /etc/localtime:/etc/localtime:ro \
+    -e TZ="Asia/Shanghai" \
+    qingpan/rnacos:v0.6.3-alpine
+
+## 官方
 docker run -d --name nacos \
   --restart=on-failure:10 \
   -p 8848:8848 \
@@ -318,12 +336,12 @@ docker run \
 ~~~shell
 docker run -d \
 	--name polardb-x \
-	-m 1024m \
 	-p 8527:8527 \
 	-v /etc/localtime:/etc/localtime:ro \
 	-e TZ="Asia/Shanghai" \
 	polardbx/polardb-x:2.3.1
-	
+
+# polardb-x 占用内存很大
 # 出现不支持外键提示的话，需要 set global enable_foreign_key = true
 ~~~
 
