@@ -73,8 +73,10 @@ services:
 
 ## RabbitMQ
 ```bash
+# 3.X
 docker run -d \
   --name rabbitmq \
+  --restart=unless-stopped \
   -p 5672:5672 -p 15672:15672 \
   -e RABBITMQ_DEFAULT_USER=admin \
   -e RABBITMQ_DEFAULT_PASS=admin \
@@ -85,6 +87,24 @@ docker run -d \
 # 延迟交换机插件安装
 wget https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.8.0/rabbitmq_delayed_message_exchange-3.8.0.ez
 docker cp rabbitmq_delayed_message_exchange-3.8.0.ez rabbitmq:/plugins/
+docker exec -it rabbitmq bash
+cd plugins
+rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+
+# 4.x
+docker run -d \
+  --name rabbitmq \
+  --restart=unless-stopped \
+  -p 5672:5672 -p 15672:15672 \
+  -e RABBITMQ_DEFAULT_USER=admin \
+  -e RABBITMQ_DEFAULT_PASS=admin \
+  -v /etc/localtime:/etc/localtime:ro \
+	-e TZ="Asia/Shanghai" \
+  rabbitmq:4.0.3-management
+
+# 延迟交换机插件安装
+wget https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v4.0.2/rabbitmq_delayed_message_exchange-4.0.2.ez
+docker cp rabbitmq_delayed_message_exchange-4.0.2.ez rabbitmq:/plugins/
 docker exec -it rabbitmq bash
 cd plugins
 rabbitmq-plugins enable rabbitmq_delayed_message_exchange
