@@ -433,5 +433,7 @@ ProxySQL作为一款成熟的MySQL中间件，能够无缝对接MySQL协议支�
    load mysql variables to run;save mysql variables to disk;
    ~~~
 
-   
+## 参考文章
 
+- [通过 PXD 部署集群](https://doc.polardbx.com/zh/quickstart/topics/quickstart-pxd-cluster.html)
+- [使用开源ProxySQL构建PolarDB-X标准版高可用路由服务](https://zhuanlan.zhihu.com/p/697117089)
