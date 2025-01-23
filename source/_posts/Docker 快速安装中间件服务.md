@@ -154,14 +154,15 @@ mkdir -p /opt/docker/mysql/conf
 mkdir -p /opt/docker/mysql/data
 mkdir -p /opt/docker/mysql/mysql-files
 #设置忽略大小写
-docker run -p 3306:3306 --name=mysql \
--v /opt/docker/mysql/conf/:/etc/mysql/ \
--v /opt/docker/mysql/data:/var/lib/mysql \
--v /opt/docker/mysql/mysql-files/:/var/lib/mysql-files \
+docker run -p 3306:3306 --name=mysql8 \
+--restart=unless-stopped \
+-v $HOME/workspace/docker-data/mysql8/conf/:/etc/mysql/ \
+-v $HOME/workspace/docker-data/mysql8/data:/var/lib/mysql \
+-v $HOME/workspace/docker-data/mysql8/mysql-files/:/var/lib/mysql-files \
 -v /etc/localtime:/etc/localtime:ro \
 -e TZ="Asia/Shanghai" \
 -e MYSQL_ROOT_PASSWORD=123456 \
--d --privileged=true --restart=unless-stop mysql:8.4.2 --lower-case-table-names=1
+-d --privileged=true mysql:8.4.2 --lower-case-table-names=1
 
 ```
 
@@ -253,7 +254,7 @@ kibana:7.17.1
 
 ## PostgresQL
 ```shell
-docker run --name postgres -d postgres:17.0-alpine
+docker run --name postgres -d postgres:17.2-bookworm
 docker cp postgres:/var/lib/postgresql/data $HOME/workspace/docker-data/postgres/data
 docker cp postgres:/etc/postgresql $HOME/workspace/docker-data/postgres/config
 docker cp postgres:/var/log/postgresql $HOME/workspace/docker-data/postgres/log
@@ -268,7 +269,7 @@ docker run --name postgres \
     -v $HOME/workspace/docker-data/postgres/config:/etc/postgresql \
     -v /etc/localtime:/etc/localtime:ro \
 		-e TZ="Asia/Shanghai" \
-    -d postgres:17.0-alpine
+    -d postgres:17.2-bookworm
 ```
 
 ## Neo4j
@@ -302,7 +303,49 @@ db.createUser({ user: 'admin', pwd: 'admin', roles: [ { role: "userAdminAnyDatab
 db.auth("admin","admin");
 ```
 
+## Mongo-ReplicaSet
+
+```bash
+docker run -d \
+    --name mongodb \
+    --restart=unless-stopped \
+    -p 27017:27017 \
+    -v $HOME/workspace/docker-data/mongo/db:/data/db \
+    -v $HOME/workspace/docker-data/mongo/configdb:/data/configdb \
+    -v $HOME/workspace/docker-data/mongo/logs:/data/logs \
+    -v $HOME/workspace/docker-data/mongo/mongod.conf:/data/mongod.conf \
+    -v /etc/localtime:/etc/localtime:ro \
+    -e TZ="Asia/Shanghai" \
+    --privileged=true \
+    mongo:7.0.12 \
+    mongod --config /data/mongod.conf
+    
+docker exec -it mongodb mongosh
+rs.initiate()
+
+## mongod.conf
+replication:
+  oplogSizeMB: 1024
+  replSetName: rs
+operationProfiling:
+  slowOpThresholdMs: 200
+systemLog:
+  destination: file
+  # path: /data/logs/system.log
+  path: /dev/stdout
+  logAppend: true
+storage:
+  dbPath: /data/db
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: 2
+net:
+  port: 27017
+  bindIp: 0.0.0.0
+```
+
 ## Nacos
+
 ```shell
 ## 建议使用资源占用更低的 r-nacos
 ## http://localhost:10848/rnacos/

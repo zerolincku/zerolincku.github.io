@@ -68,6 +68,8 @@ id username
 
    ~~~bash
    usermod -aG sudo username
+   # 或者
+   usermod -aG wheel username
    ~~~
 
 2. 验证用户是否已添加到 `sudo` 组：
