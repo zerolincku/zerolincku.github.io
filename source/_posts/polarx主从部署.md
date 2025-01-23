@@ -358,11 +358,17 @@ ProxySQL作为一款成熟的MySQL中间件，能够无缝对接MySQL协议支�
    3 rows in set (0.00 sec)
    ~~~
 
-6. 配置读写分离规则。对于SELECT FOR UPDATE配置到写库，纯SELECT配置到读库。
+6. 配置读写规则。
 
    ~~~sql
+   # 读写分离
    INSERT INTO mysql_query_rules(active,match_pattern,destination_hostgroup,apply) VALUES(1,'^select.*for update$',10,1);
    INSERT INTO mysql_query_rules(active,match_pattern,destination_hostgroup,apply) VALUES(1,'^select',30,1);
+   
+   # 读写都在主库
+   INSERT INTO mysql_query_rules (rule_id, match_pattern, destination_hostgroup, apply) VALUES (1, '^SELECT.*', 10, 1);
+   INSERT INTO mysql_query_rules (rule_id, match_pattern, destination_hostgroup, apply) VALUES (2, '^(INSERT|UPDATE|DELETE).*', 10, 1);
+   INSERT INTO mysql_query_rules (rule_id, match_pattern, destination_hostgroup, apply) VALUES (3, '^(SET|COMMIT|ROLLBACK|BEGIN).*', 10, 1);
    
    #检查
    mysql> select * from mysql_query_rules;
