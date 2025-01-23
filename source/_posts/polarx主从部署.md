@@ -402,8 +402,6 @@ ProxySQL作为一款成熟的MySQL中间件，能够无缝对接MySQL协议支�
    4 rows in set (0.00 sec)
    ~~~
 
-   
-
 8. 检查路由规则
 
    ~~~sql
@@ -421,8 +419,6 @@ ProxySQL作为一款成熟的MySQL中间件，能够无缝对接MySQL协议支�
    | 10        | select @@version_comment limit ?         |
    +-----------+------------------------------------------+
    ~~~
-
-​		
 
 ## 注意事项
 
