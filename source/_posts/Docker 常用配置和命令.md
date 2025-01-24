@@ -1,5 +1,5 @@
 ---
-title: Docker 常用配置
+title: Docker 常用配置和命令
 date: 2025-01-09 22:38:18
 tags:
   - docker
@@ -45,4 +45,18 @@ insecure-registries    私有仓库地址
 registry-mirrors   镜像加速地址，也就是第三方仓库，也可以改成自己的仓库地址http://192.168.10.7:666，这样docker pull的时候就不用加上私有仓库的地址和端口了。
 
 ~~~
+
+## Docker 常用操作
+
+#### 检查容器日志大小
+
+```bash
+ls -lh /var/lib/docker/containers/<container-id>/<container-id>-json.log
+```
+
+#### 列出所有 Docker 容器日志的大小
+
+```bash
+find /var/lib/docker/containers/ -name "*json.log" | xargs du -h | sort -hr
+```
 
