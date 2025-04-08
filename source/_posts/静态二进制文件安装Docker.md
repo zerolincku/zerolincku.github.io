@@ -67,16 +67,15 @@ tags:
    WantedBy=multi-user.target
    ```
 
-7. 修改权限以及设置 docker 自启动
+7. 设置 docker 自启动
 
    ```shell
-   sudo chmod +x /usr/lib/systemd/system/docker.service
    sudo systemctl daemon-reload
    
    sudo systemctl enable docker
    sudo systemctl start docker
    ```
-
+   
 8. 测试docker命令
 
    ```shell
