@@ -130,8 +130,8 @@ cluster:
     replica: 1
     nodes:
       - host_group: [127.0.0.1,127.0.0.1,127.0.0.1]
-    resources:
-      mem_limit: 2G
+    #resources:
+      #mem_limit: 2G
 ~~~
 
 通过以上拓扑文件创建的 PolarDB-X 标准版集群。拓扑文件包括如下属性:
@@ -149,7 +149,8 @@ cluster:
 ## 创建 PolarDB-X 集群
 
 ~~~bash
-pxd create -file polarx.yaml
+# -pull_latest_images pull latest images, if false will use local image
+pxd create -file polarx.yaml -pull_latest_images false
 
 #输出
 Processing [##################------------------] 50% create dn
@@ -428,7 +429,7 @@ ProxySQL作为一款成熟的MySQL中间件，能够无缝对接MySQL协议支�
 
 ## 注意事项
 
-1. 如果应用程序连接时出现错误 ``，是因为 ProxySQL 配置 mysql_version 版本为 5.5，但是实际代理的 mysql 版本为 8，需要修改配置
+1. 如果应用程序连接时出现错误 `Unknown system variable 'query_cache_size'`，是因为 ProxySQL 配置 mysql_version 版本为 5.5，但是实际代理的 mysql 版本为 8，需要修改配置
 
    ~~~sql
    update global_variables set variable_value="8.0.4 (ProxySQL)" where variable_name='mysql-server_version';
