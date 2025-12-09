@@ -7,7 +7,7 @@ tags:
 
 ## 1. 查看磁盘信息
 
-首先，使用 `lsblk` 或 `fdisk` 命令查看是否识别到了 `vdb` 磁盘
+首先，使用 `lsblk` 或 `fdisk` 命令查看是否识别到了 `vdb` 磁盘 
 
 ~~~bash
 lsblk
