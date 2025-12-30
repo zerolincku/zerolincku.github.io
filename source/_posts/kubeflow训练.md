@@ -155,7 +155,8 @@ def submit_job():
         env={
             "PET_NPROC_PER_NODE": "1", 
             "OMP_NUM_THREADS": "1",
-            "HF_ENDPOINT": "https://hf-mirror.com"  # <--- 加上这一行！使用国内镜像
+            "HF_ENDPOINT": "https://hf-mirror.com",  # <--- 加上这一行！使用国内镜像
+            # "HF_TOKEN": "xxx"
         },
         
         # E. 资源限制 (适配 2C/4G 集群)
