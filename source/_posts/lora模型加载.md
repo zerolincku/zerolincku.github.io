@@ -1,3 +1,10 @@
+---
+title: lora模型加载
+date: 2024-11-11 17:14:18
+tags:
+  - kubeflow
+---
+
 针对 M1 Mac 用户，如果你不想写 Python 代码，而是想用类似 Linux 命令行工具（CLI）的方式来聊天，我有两个最佳推荐：
 
 1. **Apple MLX (最推荐 M1/M2/M3)**：Apple 官方出的 AI 框架，专门为 Mac 芯片优化，速度最快，而且有现成的命令行工具。
