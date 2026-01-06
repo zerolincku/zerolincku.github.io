@@ -1,6 +1,6 @@
 ---
 title: kubeflow训练2
-date: 2024-11-11 17:14:18
+date: 2026-01-04 17:14:18
 tags:
   - kubeflow
 ---
