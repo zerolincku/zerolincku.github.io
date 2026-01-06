@@ -1,5 +1,5 @@
 ---
-r57114c5deb2-node-0-0-xqpjhr57114c5deb2-node-0-0-xqpjhtitle: kubeflow分布式训练
+title: kubeflow分布式训练
 date: 2024-11-11 17:14:18
 tags:
   - kubeflow
