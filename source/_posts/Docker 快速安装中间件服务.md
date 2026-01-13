@@ -408,15 +408,3 @@ docker run -d \
 # 出现不支持外键提示的话，需要 set global enable_foreign_key = true
 ~~~
 
-## NocoDB
-
-~~~bash
-docker run -d \
-  --name noco \
-  -v $HOME/workspace/docker-data/nocodb:/usr/app/data/ \
-  -p 28232:8080 \
-  -e NC_DB="pg://host.docker.internal:5432?u=postgres&p=postgres&d=d1" \
-  -e NC_AUTH_JWT_SECRET="569a1821-0a93-45e8-87ab-eb857f20a010" \
-  nocodb/nocodb:latest
-~~~
-
