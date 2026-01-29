@@ -254,22 +254,16 @@ kibana:7.17.1
 
 ## PostgresQL
 ```shell
-docker run --name postgres -d postgres:17.2-bookworm
-docker cp postgres:/var/lib/postgresql/data $HOME/workspace/docker-data/postgres/data
-docker cp postgres:/etc/postgresql $HOME/workspace/docker-data/postgres/config
-docker cp postgres:/var/log/postgresql $HOME/workspace/docker-data/postgres/log
+docker run --name postgres -d postgres:18.1-bookworm
 docker rm -f postgres
 
 docker run --name postgres \
     --restart=unless-stopped \
     -e POSTGRES_PASSWORD=postgres \
     -p 5432:5432 \
-    -v $HOME/workspace/docker-data/postgres/data:/var/lib/postgresql/data \
-    -v $HOME/workspace/docker-data/postgres/log:/var/log/postgresql \
-    -v $HOME/workspace/docker-data/postgres/config:/etc/postgresql \
     -v /etc/localtime:/etc/localtime:ro \
 		-e TZ="Asia/Shanghai" \
-    -d postgres:17.2-bookworm
+    -d postgres:18.1-bookworm
 ```
 
 ## Neo4j
