@@ -368,7 +368,7 @@ docker run -d --name nacos \
 ## Minio
 ```shell
 docker run -d --name passiflora-minio \
-    --restart=always \
+    --restart=unless-stopped \
     --publish 9000:9000 \
     --publish 9001:9001 \
     --env MINIO_ROOT_USER="minio" \
@@ -378,7 +378,23 @@ docker run -d --name passiflora-minio \
     bitnami/minio:2024.10.13
 ```
 
+# rustfs
+
+~~~bash
+docker run -d \
+  --restart=unless-stopped \
+  --name rustfs \
+  -p 9000:9000 \
+  -p 9001:9001 \
+  rustfs/rustfs:1.0.0-alpha.82 \
+  --address :9000 \
+  --console-enable \
+  --access-key admin \
+  --secret-key admin
+~~~
+
 ## Prometheus
+
 ```shell
 docker run \
     -d --name prometheus \
