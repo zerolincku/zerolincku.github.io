@@ -113,8 +113,8 @@ rabbitmq-plugins enable rabbitmq_delayed_message_exchange
 ## Redis
 ```bash
 docker run -d \
-	--restart=always \
-	--name myredis \
+	--restart=unless-stopped \
+	--name redis \
 	-p 6379:6379 \
 	-v /etc/localtime:/etc/localtime:ro \
   -e TZ="Asia/Shanghai" \
